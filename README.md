@@ -3,7 +3,11 @@
 This repo contains the code for the different approaches to assess and enhance CLIP performance in zero-shot tast under the medical imaging context. The assessment was performed over OpenI dataset collection, primarily on MedPix dataset. Enhancement was performed over two main approaches: fine-tuning and encoders modification.
 ## Fine tuning
 
+Brief description of fine tuning approach and experimentation
+
 ## Encoders modification
+
+Brief description of encoder modification approach and experimentation
 
 ## main.py 
 
