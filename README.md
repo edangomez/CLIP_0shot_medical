@@ -7,7 +7,7 @@ Brief description of fine tuning approach and experimentation
 
 ## Encoders modification
 
-Brief description of encoder modification approach and experimentation
+Brief description of encoder modi approach and experimentation
 
 ## main.py 
 
