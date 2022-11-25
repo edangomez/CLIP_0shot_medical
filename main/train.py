@@ -6,24 +6,23 @@
 # Author:       Sedigheh Eslami 
 # Date:         2021/08/06
 #-------------------------------------------------------------------------------
+import json
 import os
 import time
-import torch
-import torch.nn.functional as F
-from utils import utils
 from datetime import datetime
-import torch.nn as nn
-from torch import optim
+
 import clip
-from utils.utils import (
-        create_logger,
-        get_optimizer,
-        )
-from core.function import valid_model
-from core.evaluate import AverageMeter
-import json
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import tqdm
+from core.evaluate import AverageMeter
+from core.function import valid_model
+from torch import optim
 from torch.utils.tensorboard import SummaryWriter
+from utils import utils
+from utils.utils import create_logger, get_optimizer
 
 
 def _convert_models_to_fp32(model): 
@@ -50,9 +49,8 @@ def train(cfg, train_loader, eval_loader, device):
         clip.model.convert_weights(model)
 
     loss_img = nn.CrossEntropyLoss()
-    # loss_img = nn.CosineEmbeddingLoss(reduction='none')
     loss_txt = nn.CrossEntropyLoss()
-    # loss_txt = nn.CosineEmbeddingLoss(reduction='none')
+    
     optim = get_optimizer(cfg, model)
 
     best_loss, best_epoch, best_model = 10000, 0, ""
@@ -62,13 +60,12 @@ def train(cfg, train_loader, eval_loader, device):
     for epoch in range(cfg.TRAIN.N_EPOCH):
         train_all_loss = AverageMeter()
         model.train()
-        model_save_path = os.path.join(
-                model_dir,
-                f"epoch_{epoch}.pth")
         number_batch = len(train_loader)
 
         # Predicting and computing score
-        for i, (image, caption) in enumerate(train_loader):
+        for i, (image, caption) in tqdm.tqdm(enumerate(train_loader), total=len(train_loader)):
+
+            # print(cfg.TRAIN.VISION_ENCODER)
             optim.zero_grad()
             images = torch.stack([img for img in image], dim=0).to(device)
             captions = clip.tokenize(caption, context_length=cfg.TRAIN.MAX_SEQ_LENGTH).to(device)
@@ -79,9 +76,9 @@ def train(cfg, train_loader, eval_loader, device):
 
             ground_truth = torch.arange(cfg.TRAIN.BATCH_SIZE, dtype=torch.long, device=device)
             # print(ground_truth)
-            lambdaa = 0.5
+            lambdaa = 0.2
             # print(logits_per_image.shape)
-            train_total_loss = lambdaa*(loss_img(logits_per_image, ground_truth)) + (1-lambdaa)* (loss_txt(logits_per_text, ground_truth))
+            train_total_loss = lambdaa*(loss_img(logits_per_image, ground_truth)) + (1-lambdaa)*(loss_txt(logits_per_text, ground_truth))
             # train_total_loss = loss_img(logits_per_image, logits_per_text, nn.cosine_similarity(ground_truth, ground_truth)).mean() #nn.cosine_similarity(ground_truth, ground_truth))
             train_total_loss.backward()
             if device == "cpu":
@@ -90,7 +87,8 @@ def train(cfg, train_loader, eval_loader, device):
                 _convert_models_to_fp32(model)
                 optim.step()
                 clip.model.convert_weights(model)
-            if i % cfg.SHOW_STEP == 0:
+            # if i % cfg.SHOW_STEP == 0:
+            if i % 1022 == 0:
                 pbar_str = "Epoch:{:>3d}  Batch:{:>3d}/{}  Batch_Loss:{:>5.3f}  ".format(epoch, i, number_batch, train_total_loss)
                 logger.info(pbar_str)
 
@@ -114,7 +112,7 @@ def train(cfg, train_loader, eval_loader, device):
                     'state_dict': model.state_dict(),
                     'optimizer_state_dict': optim.state_dict(),
                     'best_loss': best_loss,
-                    }, os.path.join(model_dir, "best_model.pth")
+                    }, os.path.join(model_dir, f"best_model_{cfg.TRAIN.VISION_ENCODER}.pth")
                     )
             logger.info(
                     f"--------------Epoch:{epoch}    Eval_Loss:{eval_all_loss}%--------------")
