@@ -15,17 +15,17 @@ import argparse
 # Arguments
 parser = argparse.ArgumentParser(description='PyTorch Clip-zeroshot')
 parser.add_argument('--cnn', type=str, default='ViT-B/32',
-                    help='mode of evaluation')
+                    help='Which image encoder do you want to use')
 parser.add_argument('--csv', type=str, default='test.csv',
-                    help='Number of the folder want to make test')
+                    help='Name of the file where metrics are going to be saved')
 parser.add_argument('--file_df', type=str, default='Med_Modality',
-                    help='model on wich you want to take the test, must not be the same folder of  args.fold ')
+                    help='Tipe of labels over which you want to perform experimentation')
 parser.add_argument('--tuning', type=str, default='ViT.pth',
-                    help='model on wich you want to take the test, must not be the same folder of  args.fold ')
+                    help='Which model weights you want to upload')
 parser.add_argument('--mode', type=str, default='demo',
-                    help='model on wich you want to take the test, must not be the same folder of  args.fold ')
+                    help='model in which you want to run the main.py')
 parser.add_argument('--img', type=str, default='synpic31463.jpg',
-                    help='model on wich you want to take the test, must not be the same folder of  args.fold ')
+                    help='If you are in demo mode which image you want to perform demo on')
 
 args = parser.parse_args()
 
