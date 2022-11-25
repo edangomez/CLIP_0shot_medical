@@ -1,7 +1,6 @@
 import os
 import clip
 import torch
-from torchvision.datasets import CIFAR100
 import pandas as pd
 import os
 from tqdm import tqdm
@@ -9,10 +8,6 @@ import urllib.request
 import nltk
 from PIL import Image
 
-import rouge_score
-from rouge_score import rouge_scorer
-import rouge
-from rouge import Rouge
 import numpy as np
 import argparse
 
