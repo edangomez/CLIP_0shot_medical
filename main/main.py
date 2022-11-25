@@ -34,6 +34,7 @@ if __name__ == '__main__':
     data = cfg.DATASET.DATA_DIR
     args = parse_args()
     args.data_dir = data
+    
     # set GPU device
     device = torch.device("cuda:" + str(args.gpu) if args.gpu >= 0 else "cpu")
     update_config(cfg, args)
