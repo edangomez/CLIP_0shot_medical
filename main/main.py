@@ -1,13 +1,3 @@
-    #!/usr/bin/env python
-# -*- coding: utf-8 -*-#
-
-#-------------------------------------------------------------------------------
-# Name:         main
-# Description:  the entrance of procedure
-# Author:       Sedigheh Eslami 
-# Date:         2021/08/06
-#-------------------------------------------------------------------------------
-
 import _init_paths
 from config import cfg, update_config
 import argparse
