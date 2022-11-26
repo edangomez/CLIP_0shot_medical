@@ -14,8 +14,8 @@ To replicate our experimental framework, use the ```main.py``` file and configur
 
 ## main.py 
 
-We added a main.py file which allow to reproduce the results from the main experiments of our paper and perform classification over an image of your choice. In order to reproduce of our paper run the following command:
+We added a main.py file which allow to reproduce the results from the main experiments of our paper and perform classification over an image of your choice. In order to run a demo of the propsed model of our paper run the following command:
 ```
-python main.py --mode test
+python main.py --mode demmo
 ```
-This will reproduce our best performance approach. In order to However, the ```--experiment``` argument will allow you to reproduce other experiments from the paper. Use as input to this argument the notation on the paper
+The ```--mode``` argument will allow you to reproduce other experiments from the paper.
