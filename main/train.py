@@ -64,8 +64,7 @@ def train(cfg, train_loader, eval_loader, device):
 
         # Predicting and computing score
         for i, (image, caption) in tqdm.tqdm(enumerate(train_loader), total=len(train_loader)):
-
-            # print(cfg.TRAIN.VISION_ENCODER)
+            
             optim.zero_grad()
             images = torch.stack([img for img in image], dim=0).to(device)
             captions = clip.tokenize(caption, context_length=cfg.TRAIN.MAX_SEQ_LENGTH).to(device)
@@ -75,11 +74,11 @@ def train(cfg, train_loader, eval_loader, device):
             logits_per_text *= (np.exp(0.01) / np.exp(0.07))
 
             ground_truth = torch.arange(cfg.TRAIN.BATCH_SIZE, dtype=torch.long, device=device)
-            # print(ground_truth)
+            
             lambdaa = 0.2
-            # print(logits_per_image.shape)
+            
             train_total_loss = lambdaa*(loss_img(logits_per_image, ground_truth)) + (1-lambdaa)*(loss_txt(logits_per_text, ground_truth))
-            # train_total_loss = loss_img(logits_per_image, logits_per_text, nn.cosine_similarity(ground_truth, ground_truth)).mean() #nn.cosine_similarity(ground_truth, ground_truth))
+            
             train_total_loss.backward()
             if device == "cpu":
                 optim.step()
@@ -87,7 +86,7 @@ def train(cfg, train_loader, eval_loader, device):
                 _convert_models_to_fp32(model)
                 optim.step()
                 clip.model.convert_weights(model)
-            # if i % cfg.SHOW_STEP == 0:
+                
             if i % 1022 == 0:
                 pbar_str = "Epoch:{:>3d}  Batch:{:>3d}/{}  Batch_Loss:{:>5.3f}  ".format(epoch, i, number_batch, train_total_loss)
                 logger.info(pbar_str)
