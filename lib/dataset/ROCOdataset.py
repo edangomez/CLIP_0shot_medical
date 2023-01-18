@@ -51,8 +51,6 @@ class ImageTextDataset(VisionDataset):
         else:
             raise ValueError(f"{name} dataset is not supported!")
 
-        # with open(file_path, "r") as f:
-        #     examples = [json.loads(line) for line in f.readlines()]
         df = pd.read_csv('/home/edgomez10/Project/dataset/roco_dataset/train/radiology/traindata2.csv')
         dic = df.to_dict(orient='records')
 
@@ -79,9 +77,6 @@ class ImageTextDataset(VisionDataset):
         #try:
         image = read_image(path, mode=ImageReadMode.RGB)
         return image
-        #except:
-        #    print(f"No image at {path} exists!")
-        #    pass
 
     def _load_target(self, idx):
         return self.captions[idx]
