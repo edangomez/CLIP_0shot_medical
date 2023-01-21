@@ -100,7 +100,7 @@ if args.mode == "test":
         try:
             
             image_input = preprocess(Image.open(os.path.join('MedCLIP','medpix_dataset',filename))).unsqueeze(0).to(device)
-            text_inputs = torch.cat([clip.tokenize(f"Medical image of {c}") for c in clases]).to(device)#, truncate=True) for c in clases]).to(device)
+            text_inputs = torch.cat([clip.tokenize(f"Medical image of {c}") for c in clases]).to(device)
 
             # Calculate features
             with torch.no_grad():
@@ -139,7 +139,7 @@ if args.mode == "test":
 if args.mode == "demo":
 
     image_input = preprocess(Image.open(os.path.join('MedCLIP','medpix_dataset',args.img))).unsqueeze(0).to(device)
-    text_inputs = torch.cat([clip.tokenize(f"Medical image of {c}") for c in clases]).to(device)#, truncate=True) for c in clases]).to(device)
+    text_inputs = torch.cat([clip.tokenize(f"Medical image of {c}") for c in clases]).to(device)
 
     # Calculate features
     with torch.no_grad():
